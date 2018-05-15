@@ -11,6 +11,8 @@ namespace RankBoard.Ids
 {
     public static class Config
     {
+        const string apiName = "RankBoardApi";
+
         public static IEnumerable<Client> GetClients()
         {
             return new List<Client>
@@ -19,12 +21,13 @@ namespace RankBoard.Ids
                 {
                     ClientId = "AngularClient",
                     ClientName = "In house angular client",
-                    AllowedGrantTypes = GrantTypes.ClientCredentials,
+                    AllowedGrantTypes = GrantTypes.ResourceOwnerPassword,
                     ClientSecrets = new List<Secret>
                     {
                         new Secret("superSecretPassword".Sha256())
                     },
-                    AllowedScopes = new List<string> { "customAPI.read" }
+                    AllowedScopes = new List<string> { $"{apiName}.read" },
+                    AllowOfflineAccess = true
                 }
             };
         }
@@ -49,15 +52,15 @@ namespace RankBoard.Ids
             {
                 new ApiResource
                 {
-                    Name = "customAPI",
-                    DisplayName = "Custom API",
-                    Description = "Custom API Access",
-                    UserClaims = new List<string> { "role" },
+                    Name = apiName,
+                    DisplayName = apiName,
+                    Description = $"{apiName} Access",
+                    UserClaims = new List<string> { JwtClaimTypes.Role, JwtClaimTypes.Email },
                     ApiSecrets = new List<Secret> { new Secret("scopeSecret".Sha256()) },
                     Scopes = new List<Scope>
                     {
-                        new Scope("customAPI.read"),
-                        new Scope("customAPI.write")
+                        new Scope($"{apiName}.read"),
+                        new Scope($"{apiName}.write")
                     }
                 }
             };

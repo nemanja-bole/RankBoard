@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
@@ -26,6 +27,27 @@ namespace RankBoard.Api
         {
             services.AddDependencies(Configuration);
 
+            services.AddAuthentication(options =>
+            {
+                options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+            })
+            .AddJwtBearer(x =>
+            {
+                x.Authority = Configuration["IdentityServerAddress"]; //use from configuration!!!!
+                x.Audience = "RankBoardApi";
+                x.RequireHttpsMetadata = false;
+            });
+
+            services.AddCors(options =>
+                options.AddPolicy("default", policy =>
+                {
+                    policy.AllowAnyHeader()
+                        .AllowAnyOrigin()
+                        .AllowAnyMethod();
+                })
+            );
+
             services.AddMvc();
         }
 
@@ -36,6 +58,8 @@ namespace RankBoard.Api
             {
                 app.UseDeveloperExceptionPage();
             }
+
+            app.UseAuthentication();
 
             app.UseMvc();
         }
