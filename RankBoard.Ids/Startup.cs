@@ -7,6 +7,7 @@ using IdentityServer4.Test;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace RankBoard.Ids
@@ -21,8 +22,10 @@ namespace RankBoard.Ids
                 .AddInMemoryClients(Config.GetClients())
                 .AddInMemoryIdentityResources(Config.GetIdentityResources())
                 .AddInMemoryApiResources(Config.GetApiResources())
-                .AddTestUsers(Config.GetTestUsers())
+                .AddAspNetIdentity<IdentityUser>()
                 .AddDeveloperSigningCredential();
+
+            services.AddIdentity<IdentityUser, IdentityRole>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
