@@ -4,6 +4,8 @@
     {
         public string ProviderDisplayName { get; set; }
         public string UserId { get; set; }
+
+        public User User { get; set; }
     }
 
     public class UserLoginKey

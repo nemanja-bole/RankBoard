@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
 
 namespace RankBoard.Data.Models.Identity
 {
@@ -19,5 +21,22 @@ namespace RankBoard.Data.Models.Identity
         public string SecurityStamp { get; set; }
         public bool TwoFactorEnabled { get; set; }
         public string UserName { get; set; }
+
+        public virtual ICollection<UserRole> Roles { get; set; }
+
+        public virtual ICollection<UserClaim> UserClaims { get; set; }
+        public virtual ICollection<UserLogin> UserLogins { get; set; }
+        public virtual ICollection<UserToken> UserTokens { get; set; }
+
+
+
+        public User()
+        {
+            Roles = new Collection<UserRole>();
+            UserClaims = new Collection<UserClaim>();
+            UserLogins = new Collection<UserLogin>();
+            UserTokens = new Collection<UserToken>();
+        }
+
     }
 }

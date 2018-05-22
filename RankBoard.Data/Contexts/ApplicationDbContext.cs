@@ -13,12 +13,12 @@ namespace RankBoard.Data.Contexts
         {
         }
 
-        DbSet<User> Users { get; set; }
-        DbSet<Role> Roles { get; set; }
-        DbSet<RoleClaim> RoleClaims { get; set; }
-        DbSet<UserClaim> UserClaims { get; set; }
-        DbSet<UserLogin> UserLogins { get; set; }
-        DbSet<UserToken> UserTokens { get; set; }
+        public virtual DbSet<User> Users { get; set; }
+        public virtual DbSet<Role> Roles { get; set; }
+        public virtual DbSet<RoleClaim> RoleClaims { get; set; }
+        public virtual DbSet<UserClaim> UserClaims { get; set; }
+        public virtual DbSet<UserLogin> UserLogins { get; set; }
+        public virtual DbSet<UserToken> UserTokens { get; set; }
 
         protected override void OnModelCreating(ModelBuilder builder)
         {

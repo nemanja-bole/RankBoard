@@ -11,7 +11,7 @@ namespace RankBoard.Repositories.Implementation
 {
     public class Repository<TEntity, TKey> : IRepository<TEntity, TKey> where TEntity : class
     {
-        private DbContext _context;
+        protected DbContext _context;
         private DbSet<TEntity> _set;
 
         public Repository(DbContext context)

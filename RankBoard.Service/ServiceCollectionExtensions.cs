@@ -3,9 +3,6 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using RankBoard.Data.Contexts;
 using RankBoard.Repositories;
-using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace RankBoard.Service
 {
@@ -29,8 +26,8 @@ namespace RankBoard.Service
         {            
             services.AddDbContext<ApplicationDbContext>(options => options.UseSqlServer(configuration.GetConnectionString("RankBoardUsersDb")));
 
-            services.AddScoped<IUnitOfWork, UnitOfWork>(provider => 
-                new UnitOfWork(
+            services.AddScoped<IUnitOfWork, UnitOfWorkIdentity>(provider => 
+                new UnitOfWorkIdentity(
                     new ApplicationDbContext(
                         new DbContextOptionsBuilder<ApplicationDbContext>()
                         .UseSqlServer(configuration.GetConnectionString("RankBoardUsersDb"))
