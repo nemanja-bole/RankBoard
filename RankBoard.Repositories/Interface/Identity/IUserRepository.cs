@@ -11,5 +11,7 @@ namespace RankBoard.Repositories.Interface.Identity
         User FindNormalizedUserName(string normalizedUserName);
 
         User FindByNormalizedEmal(string normalizedEmail);
+
+        IEnumerable<User> FindUsersByRoleName(string roleName);
     }
 }

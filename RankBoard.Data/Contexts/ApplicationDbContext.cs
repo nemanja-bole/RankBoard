@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using RankBoard.Data.ModelBuilders.Identity;
 using RankBoard.Data.Models.Identity;
 using System;
 using System.Collections.Generic;
@@ -23,6 +24,19 @@ namespace RankBoard.Data.Contexts
         protected override void OnModelCreating(ModelBuilder builder)
         {
             base.OnModelCreating(builder);
+
+            builder.ApplyConfiguration(new UserModelBuilder());
+            builder.ApplyConfiguration(new RoleModelBuilder());
+
+            builder.ApplyConfiguration(new UserClaimModelBulder());
+            builder.ApplyConfiguration(new UserLoginModelBuilder());
+            builder.ApplyConfiguration(new UserTokenModelBuilder());
+
+            builder.ApplyConfiguration(new RoleClaimBuilder());
+
+            builder.ApplyConfiguration(new UserRoleModelBuilder());
+
+
         }
     }
 }

@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using RankBoard.Data.Models.Identity;
 using RankBoard.Repositories.Interface;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace RankBoard.Repositories.Implementation.Identity

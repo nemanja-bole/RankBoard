@@ -25,11 +25,41 @@ namespace RankBoard.Repositories
             _context = context;
         }
 
+        public IRoleRepository RoleRepository
+        {
+            get { return _roleRepository ?? (_roleRepository = new RoleRepository(_context)); }
+        }
+
+        public IRoleClaimRepository RoleClaimRepository
+        {
+            get { return _roleClaimRepository ?? (_roleClaimRepository = new RoleClaimRepository(_context)); }
+        }
+
         public IUserRepository UserRepository
         {
             get { return _userRepository ?? (_userRepository = new UserRepository(_context)); }
         }
-        
+
+        public IUserClaimRepository UserClaimRepository
+        {
+            get { return _userClaimRepository ?? (_userClaimRepository = new UserClaimRepository(_context)); } 
+        }
+
+        public IUserLoginRepository UserLoginRepository
+        {
+            get { return _userLoginRepository ?? (_userLoginRepository = new UserLoginRepository(_context)); } 
+        }
+
+        public IRepository<UserToken, UserTokenKey> UserTokenRepository
+        {
+            get { return _userTokenRepository ?? (_userTokenRepository = new UserTokenRepository(_context)); } 
+        }
+
+        public IUserRoleRepository UserRoleRepository
+        {
+            get { return _userRoleRepository ?? (_userRoleRepository = new UserRoleRepository(_context)); }
+        }
+
         public int SaveChanges()
         {
             return _context.SaveChanges();

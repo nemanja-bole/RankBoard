@@ -9,7 +9,7 @@ namespace RankBoard.Repositories.Interface.Identity
     {
         void Add(string userId, string roleName);
         void Remove(string userId, string roleName);
-        IEnumerable<string> GetRoleNamesByUserId(string userId);
+        IEnumerable<Role> GetRolesByUserId(string userId);
         IEnumerable<User> GetUsersByRoleName(string roleName);
     }
 }
