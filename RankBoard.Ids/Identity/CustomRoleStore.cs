@@ -50,7 +50,24 @@ namespace RankBoard.Ids.Identity
 
         public Task<IdentityResult> DeleteAsync(IdentityRole role, CancellationToken cancellationToken)
         {
-            throw new NotImplementedException();
+            try
+            {
+                if (cancellationToken != null)
+                {
+                    cancellationToken.ThrowIfCancellationRequested();
+                }
+
+                if (role == null)
+                    throw new ArgumentNullException(nameof(role));
+
+                _userSerivice.RemoveRole(role.Id);
+
+                return Task.FromResult(IdentityResult.Success);
+            }
+            catch (Exception ex)
+            {
+                return Task.FromResult(IdentityResult.Failed(new IdentityError { Code = ex.Message, Description = ex.Message }));
+            }
         }
 
         public void Dispose()

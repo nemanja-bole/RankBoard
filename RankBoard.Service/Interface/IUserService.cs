@@ -6,5 +6,6 @@ namespace RankBoard.Service.Interface
     {
         void AddRole(RoleDto roleDto);
 
+        void RemoveRole(string id);
     }
 }

@@ -3,9 +3,6 @@ using RankBoard.Data.Models.Identity;
 using RankBoard.Dto;
 using RankBoard.Repositories;
 using RankBoard.Service.Interface;
-using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace RankBoard.Service.Implementation
 {
@@ -23,6 +20,13 @@ namespace RankBoard.Service.Implementation
         public void AddRole(RoleDto roleDto)
         {
             _unitOfWork.RoleRepository.Add(_mapper.Map<RoleDto, Role>(roleDto));
+        }
+
+        public void RemoveRole(string id)
+        {
+            var roleToRemove = _unitOfWork.RoleRepository.FindById(id);
+
+            _unitOfWork.RoleRepository.Remove(roleToRemove);
         }
     }
 }
