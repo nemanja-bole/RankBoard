@@ -1,4 +1,7 @@
-﻿using System;
+﻿using RankBoard.Data.Models.Identity;
+using RankBoard.Repositories.Interface;
+using RankBoard.Repositories.Interface.Identity;
+using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Threading;
@@ -8,8 +11,5 @@ namespace RankBoard.Repositories
 {
     public interface IUnitOfWork
     {
-        int SaveChanges();
-        Task<int> SaveChangesAsync();
-        Task<int> SaveChangesAsync(CancellationToken cancelationToken);
     }
 }

@@ -1,4 +1,6 @@
 ﻿using Microsoft.AspNetCore.Identity;
+using RankBoard.Dto;
+using RankBoard.Service.Interface;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,6 +12,13 @@ namespace RankBoard.Ids.Identity
 {
     public class CustomRoleStore : IRoleStore<IdentityRole>, IRoleClaimStore<IdentityRole>
     {
+        private readonly IUserService _userSerivice;
+
+        public CustomRoleStore(IUserService userService)
+        {
+            _userSerivice = userService;
+        }
+
         public Task AddClaimAsync(IdentityRole role, Claim claim, CancellationToken cancellationToken = default(CancellationToken))
         {
             throw new NotImplementedException();
@@ -17,7 +26,26 @@ namespace RankBoard.Ids.Identity
 
         public Task<IdentityResult> CreateAsync(IdentityRole role, CancellationToken cancellationToken)
         {
-            throw new NotImplementedException();
+            try
+            {
+                if(cancellationToken != null)
+                {
+                    cancellationToken.ThrowIfCancellationRequested();
+                }
+
+                if (role == null)
+                    throw new ArgumentNullException(nameof(role));
+
+                var roleEntity = getRoleEntity(role);
+
+                _userSerivice.AddRole(roleEntity);
+
+                return Task.FromResult(IdentityResult.Success);
+            }
+            catch (Exception ex)
+            {
+                return Task.FromResult(IdentityResult.Failed(new IdentityError { Code = ex.Message, Description = ex.Message }));
+            }
         }
 
         public Task<IdentityResult> DeleteAsync(IdentityRole role, CancellationToken cancellationToken)
@@ -78,6 +106,33 @@ namespace RankBoard.Ids.Identity
         public Task<IdentityResult> UpdateAsync(IdentityRole role, CancellationToken cancellationToken)
         {
             throw new NotImplementedException();
+        }
+
+
+        private RoleDto getRoleEntity(IdentityRole value)
+        {
+            return value == null
+                ? default(RoleDto)
+                : new RoleDto
+                {
+                    ConcurrencyStamp = value.ConcurrencyStamp,
+                    Id = value.Id,
+                    Name = value.Name,
+                    NormalizedName = value.NormalizedName
+                };
+        }
+
+        private IdentityRole getIdentityRole(RoleDto value)
+        {
+            return value == null
+                ? default(IdentityRole)
+                : new IdentityRole
+                {
+                    ConcurrencyStamp = value.ConcurrencyStamp,
+                    Id = value.Id,
+                    Name = value.Name,
+                    NormalizedName = value.NormalizedName
+                };
         }
     }
 }

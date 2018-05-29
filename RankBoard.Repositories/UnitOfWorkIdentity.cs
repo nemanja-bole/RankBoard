@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace RankBoard.Repositories
 {
-    public class UnitOfWorkIdentity : IUnitOfWork, IDisposable
+    public class UnitOfWorkIdentity : IUnitOfWorkIdentity, IDisposable
     {
         private readonly DbContext _context;
 

@@ -11,6 +11,8 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using RankBoard.Service;
+using RankBoard.Service.Implementation;
+using RankBoard.Service.Interface;
 
 namespace RankBoard.Ids
 {
@@ -30,6 +32,8 @@ namespace RankBoard.Ids
             services.AddIdentity<IdentityUser, IdentityRole>();
 
             services.AddApplicationDbContext(Configuration);
+
+            services.AddScoped<IUserService, UserService>();
 
             services.AddIdentityServer()
                 .AddInMemoryClients(Config.GetClients())

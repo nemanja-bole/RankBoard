@@ -1,10 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using RankBoard.Dto;
 
 namespace RankBoard.Service.Interface
 {
     public interface IUserService
     {
+        void AddRole(RoleDto roleDto);
+
     }
 }
