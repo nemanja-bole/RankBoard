@@ -20,8 +20,25 @@ namespace RankBoard.Ids.Identity
         }
 
         public Task AddClaimAsync(IdentityRole role, Claim claim, CancellationToken cancellationToken = default(CancellationToken))
-        {
-            throw new NotImplementedException();
+        {           
+            if (cancellationToken != null)
+            {
+                cancellationToken.ThrowIfCancellationRequested();
+            }
+
+            if (role == null)
+            {
+                throw new ArgumentNullException();
+            }
+
+            if (claim == null)
+            {
+                throw new ArgumentNullException();
+            }
+
+            _userSerivice.AddRoleClaim(getRoleEntity(role), claim);
+
+            return Task.CompletedTask;            
         }
 
         public Task<IdentityResult> CreateAsync(IdentityRole role, CancellationToken cancellationToken)
@@ -34,7 +51,9 @@ namespace RankBoard.Ids.Identity
                 }
 
                 if (role == null)
+                {
                     throw new ArgumentNullException(nameof(role));
+                }
 
                 var roleEntity = getRoleEntity(role);
 
@@ -58,7 +77,9 @@ namespace RankBoard.Ids.Identity
                 }
 
                 if (role == null)
+                {
                     throw new ArgumentNullException(nameof(role));
+                }
 
                 _userSerivice.RemoveRole(role.Id);
 
@@ -72,7 +93,7 @@ namespace RankBoard.Ids.Identity
 
         public void Dispose()
         {
-            throw new NotImplementedException();
+            // Lifetimes of dependencies are managed by the IoC container, so disposal here is unnecessary.
         }
 
         public Task<IdentityRole> FindByIdAsync(string roleId, CancellationToken cancellationToken)

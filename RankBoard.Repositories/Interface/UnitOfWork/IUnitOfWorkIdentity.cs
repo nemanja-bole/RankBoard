@@ -2,9 +2,9 @@
 using RankBoard.Repositories.Interface;
 using RankBoard.Repositories.Interface.Identity;
 
-namespace RankBoard.Repositories
+namespace RankBoard.Repositories.Interface.UnitOfWork
 {
-    public interface IUnitOfWorkIdentity
+    public interface IUnitOfWorkIdentity : IBaseUnitOfWork
     {
         IRoleRepository RoleRepository { get; }
         IRoleClaimRepository RoleClaimRepository { get; }

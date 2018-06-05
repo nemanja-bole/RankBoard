@@ -3,16 +3,13 @@ using RankBoard.Data.Models.Identity;
 using RankBoard.Repositories.Implementation.Identity;
 using RankBoard.Repositories.Interface;
 using RankBoard.Repositories.Interface.Identity;
+using RankBoard.Repositories.Interface.UnitOfWork;
 using System;
-using System.Threading;
-using System.Threading.Tasks;
 
-namespace RankBoard.Repositories
+namespace RankBoard.Repositories.Implementation.UnitOfWork
 {
-    public class UnitOfWorkIdentity : IUnitOfWorkIdentity, IDisposable
+    public class UnitOfWorkIdentity : BaseUnitOfWork, IUnitOfWorkIdentity, IDisposable
     {
-        private readonly DbContext _context;
-
         private IRoleRepository _roleRepository;
         private IRoleClaimRepository _roleClaimRepository;
         private IUserRepository _userRepository;
@@ -58,26 +55,6 @@ namespace RankBoard.Repositories
         public IUserRoleRepository UserRoleRepository
         {
             get { return _userRoleRepository ?? (_userRoleRepository = new UserRoleRepository(_context)); }
-        }
-
-        public int SaveChanges()
-        {
-            return _context.SaveChanges();
-        }
-
-        public Task<int> SaveChangesAsync()
-        {
-            return _context.SaveChangesAsync();
-        }
-
-        public Task<int> SaveChangesAsync(CancellationToken cancelationToken)
-        {
-            return _context.SaveChangesAsync(cancelationToken);
-        }
-
-        public void Dispose()
-        {
-            _context.Dispose();
         }
     }
 }

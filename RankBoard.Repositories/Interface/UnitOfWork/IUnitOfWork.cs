@@ -7,9 +7,9 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace RankBoard.Repositories
+namespace RankBoard.Repositories.Interface.UnitOfWork
 {
-    public interface IUnitOfWork
+    public interface IUnitOfWork : IBaseUnitOfWork
     {
     }
 }

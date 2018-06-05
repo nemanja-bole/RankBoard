@@ -1,7 +1,9 @@
-﻿using AutoMapper;
+﻿using System.Security.Claims;
+using AutoMapper;
 using RankBoard.Data.Models.Identity;
 using RankBoard.Dto;
 using RankBoard.Repositories;
+using RankBoard.Repositories.Interface.UnitOfWork;
 using RankBoard.Service.Interface;
 
 namespace RankBoard.Service.Implementation
@@ -20,6 +22,15 @@ namespace RankBoard.Service.Implementation
         public void AddRole(RoleDto roleDto)
         {
             _unitOfWork.RoleRepository.Add(_mapper.Map<RoleDto, Role>(roleDto));
+            _unitOfWork.SaveChanges();
+        }
+
+        public void AddRoleClaim(RoleDto role, Claim claim)
+        {
+            var roleClaimDto = _mapper.Map<Claim, RoleClaimDto>(claim);
+            var roleClaim = _mapper.Map<RoleClaimDto, RoleClaim>(roleClaimDto);
+
+            _unitOfWork.RoleClaimRepository.Add(roleClaim);
         }
 
         public void RemoveRole(string id)
@@ -27,6 +38,7 @@ namespace RankBoard.Service.Implementation
             var roleToRemove = _unitOfWork.RoleRepository.FindById(id);
 
             _unitOfWork.RoleRepository.Remove(roleToRemove);
+            _unitOfWork.SaveChanges();
         }
     }
 }

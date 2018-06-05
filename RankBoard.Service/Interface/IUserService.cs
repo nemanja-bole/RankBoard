@@ -1,4 +1,5 @@
 ﻿using RankBoard.Dto;
+using System.Security.Claims;
 
 namespace RankBoard.Service.Interface
 {
@@ -7,5 +8,7 @@ namespace RankBoard.Service.Interface
         void AddRole(RoleDto roleDto);
 
         void RemoveRole(string id);
+
+        void AddRoleClaim(RoleDto role, Claim claim);
     }
 }

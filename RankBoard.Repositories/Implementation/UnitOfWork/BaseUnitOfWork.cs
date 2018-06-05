@@ -1,12 +1,14 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using RankBoard.Repositories.Interface.UnitOfWork;
+using System;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace RankBoard.Repositories
+namespace RankBoard.Repositories.Implementation.UnitOfWork
 {
-    public abstract class BaseUnitOfWork
+    public abstract class BaseUnitOfWork : IBaseUnitOfWork
     {
-        private readonly DbContext _context;
+        protected DbContext _context;
 
         public int SaveChanges()
         {

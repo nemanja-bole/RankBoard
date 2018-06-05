@@ -4,6 +4,8 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using RankBoard.Data.Contexts;
 using RankBoard.Repositories;
+using RankBoard.Repositories.Implementation.UnitOfWork;
+using RankBoard.Repositories.Interface.UnitOfWork;
 
 namespace RankBoard.Service
 {
