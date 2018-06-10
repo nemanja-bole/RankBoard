@@ -1,4 +1,5 @@
 ﻿using RankBoard.Dto;
+using System.Collections.Generic;
 using System.Security.Claims;
 
 namespace RankBoard.Service.Interface
@@ -9,6 +10,16 @@ namespace RankBoard.Service.Interface
 
         void RemoveRole(string id);
 
-        void AddRoleClaim(RoleDto role, Claim claim);
+        void AddRoleClaim(RoleDto roleDto, Claim claim);
+
+        RoleDto FindRoleById(string id);
+
+        RoleDto FindRoleByName(string name);
+
+        IList<Claim> GetRoleClaims(string roleId);
+
+        void UpdateRole(RoleDto role);
+
+        void RemoveClaim(RoleDto roleDto, Claim claim);
     }
 }

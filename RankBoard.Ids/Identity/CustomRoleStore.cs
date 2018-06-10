@@ -98,52 +98,156 @@ namespace RankBoard.Ids.Identity
 
         public Task<IdentityRole> FindByIdAsync(string roleId, CancellationToken cancellationToken)
         {
-            throw new NotImplementedException();
+            if(cancellationToken != null)
+            {
+                cancellationToken.ThrowIfCancellationRequested();
+            }
+
+            if(string.IsNullOrWhiteSpace(roleId))
+            {
+                throw new ArgumentNullException(nameof(roleId));
+            }
+
+            if(!Guid.TryParse(roleId, out Guid id))
+            {
+                throw new ArgumentOutOfRangeException(nameof(roleId), $"{nameof(roleId)} is not valid GUID");
+            }
+
+            var roleEntity = _userSerivice.FindRoleById(id.ToString());
+
+            return Task.FromResult(getIdentityRole(roleEntity));
         }
 
         public Task<IdentityRole> FindByNameAsync(string normalizedRoleName, CancellationToken cancellationToken)
         {
-            throw new NotImplementedException();
+            if (cancellationToken != null)
+            {
+                cancellationToken.ThrowIfCancellationRequested();
+            }
+
+            if (string.IsNullOrWhiteSpace(normalizedRoleName))
+            {
+                throw new ArgumentNullException(nameof(normalizedRoleName));
+            }
+
+            var roleEntity = _userSerivice.FindRoleByName(normalizedRoleName);
+
+            return Task.FromResult(getIdentityRole(roleEntity));
         }
 
         public Task<IList<Claim>> GetClaimsAsync(IdentityRole role, CancellationToken cancellationToken = default(CancellationToken))
         {
-            throw new NotImplementedException();
+            if (cancellationToken != null)
+            {
+                cancellationToken.ThrowIfCancellationRequested();
+            }
+
+            if (role == null)
+            {
+                throw new ArgumentNullException(nameof(role));
+            }
+
+            var result = _userSerivice.GetRoleClaims(role.Id);
+
+            return Task.FromResult(result);
         }
 
         public Task<string> GetNormalizedRoleNameAsync(IdentityRole role, CancellationToken cancellationToken)
         {
-            throw new NotImplementedException();
+            if (cancellationToken != null)
+                cancellationToken.ThrowIfCancellationRequested();
+
+            if (role == null)
+                throw new ArgumentNullException(nameof(role));
+
+            return Task.FromResult(role.NormalizedName);
         }
 
         public Task<string> GetRoleIdAsync(IdentityRole role, CancellationToken cancellationToken)
         {
-            throw new NotImplementedException();
+            if (cancellationToken != null)
+                cancellationToken.ThrowIfCancellationRequested();
+
+            if (role == null)
+                throw new ArgumentNullException(nameof(role));
+
+            return Task.FromResult(role.Id);
         }
 
         public Task<string> GetRoleNameAsync(IdentityRole role, CancellationToken cancellationToken)
         {
-            throw new NotImplementedException();
+            if (cancellationToken != null)
+                cancellationToken.ThrowIfCancellationRequested();
+
+            if (role == null)
+                throw new ArgumentNullException(nameof(role));
+
+            return Task.FromResult(role.Name);
         }
 
         public Task RemoveClaimAsync(IdentityRole role, Claim claim, CancellationToken cancellationToken = default(CancellationToken))
         {
-            throw new NotImplementedException();
+            if (cancellationToken != null)
+                cancellationToken.ThrowIfCancellationRequested();
+
+            if (role == null)
+                throw new ArgumentNullException(nameof(role));
+
+            if (claim == null)
+                throw new ArgumentNullException(nameof(claim));
+
+            _userSerivice.RemoveClaim(getRoleEntity(role), claim);
+
+            return Task.CompletedTask;
         }
 
         public Task SetNormalizedRoleNameAsync(IdentityRole role, string normalizedName, CancellationToken cancellationToken)
         {
-            throw new NotImplementedException();
+            if (cancellationToken != null)
+                cancellationToken.ThrowIfCancellationRequested();
+
+            if (role == null)
+                throw new ArgumentNullException(nameof(role));
+
+            role.NormalizedName = normalizedName;
+
+            return Task.CompletedTask;
         }
 
         public Task SetRoleNameAsync(IdentityRole role, string roleName, CancellationToken cancellationToken)
         {
-            throw new NotImplementedException();
+            if (cancellationToken != null)
+                cancellationToken.ThrowIfCancellationRequested();
+
+            if (role == null)
+                throw new ArgumentNullException(nameof(role));
+
+            role.Name = roleName;
+
+            return Task.CompletedTask;
         }
 
         public Task<IdentityResult> UpdateAsync(IdentityRole role, CancellationToken cancellationToken)
         {
-            throw new NotImplementedException();
+            try
+            {
+                if (cancellationToken != null)
+                    cancellationToken.ThrowIfCancellationRequested();
+
+                if (role == null)
+                    throw new ArgumentNullException(nameof(role));
+
+                var roleEntity = getRoleEntity(role);
+
+                _userSerivice.UpdateRole(roleEntity);
+
+                return Task.FromResult(IdentityResult.Success);
+
+            }
+            catch (Exception ex)
+            {
+                return Task.FromResult(IdentityResult.Failed(new IdentityError { Code = ex.Message, Description = ex.Message } ));
+            }
         }
 
 

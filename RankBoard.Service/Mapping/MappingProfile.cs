@@ -14,8 +14,6 @@ namespace RankBoard.Service.Mapping
         {
             CreateMap<RoleDto, Role>();
             CreateMap<RoleClaimDto, RoleClaim>();
-
-            CreateMap<Claim, RoleClaimDto>();
         }
     }
 }
