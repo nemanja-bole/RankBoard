@@ -79,6 +79,12 @@ namespace RankBoard.Repositories.Implementation
             Set.Remove(entity);
         }
 
+        public void Remove(TKey key)
+        {
+            var entity = Set.Find(key);
+            Set.Remove(entity);
+        }
+
         public void Update(TEntity entity)
         {
             var entry = _context.Entry(entity);

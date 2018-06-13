@@ -1,5 +1,5 @@
 ﻿using Microsoft.AspNetCore.Identity;
-using RankBoard.Dto;
+using RankBoard.Dto.Identity;
 using RankBoard.Service.Interface;
 using System;
 using System.Collections.Generic;

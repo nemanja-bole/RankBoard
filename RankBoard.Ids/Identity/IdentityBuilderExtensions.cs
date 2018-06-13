@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.DependencyInjection;
-using RankBoard.Dto;
+using RankBoard.Dto.Identity;
 using System;
 using System.Collections.Generic;
 using System.Linq;

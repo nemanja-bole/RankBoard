@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace RankBoard.Dto
+namespace RankBoard.Dto.Identity
 {
     public class ClaimBaseDto
     {

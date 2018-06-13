@@ -5,7 +5,8 @@ using System.Linq;
 using System.Security.Claims;
 using System.Threading;
 using System.Threading.Tasks;
-using RankBoard.Dto;
+using RankBoard.Dto.Identity;
+using RankBoard.Service.Interface;
 
 namespace RankBoard.Ids.Identity
 {
@@ -24,56 +25,197 @@ namespace RankBoard.Ids.Identity
         IQueryableUserStore<ApplicationUserDto>
 
     {
-        public IQueryable<ApplicationUserDto> Users => throw new NotImplementedException();
+        private readonly IUserService _userService;
+
+        public CustomUserStore(IUserService userService)
+        {
+            _userService = userService;
+        }
+
+        public IQueryable<ApplicationUserDto> Users
+        {
+            get
+            {
+                return _userService.GetAllUsers();
+            }
+        }
 
         public Task AddClaimsAsync(ApplicationUserDto user, IEnumerable<Claim> claims, CancellationToken cancellationToken)
         {
-            throw new NotImplementedException();
+            if(cancellationToken != null)
+            {
+                cancellationToken.ThrowIfCancellationRequested();
+            }
+
+            if(user == null)
+            {
+                throw new ArgumentNullException(nameof(user));
+            }
+
+            if(claims == null)
+            {
+                throw new ArgumentNullException(nameof(claims));
+            }
+
+            _userService.AddUserClaims(user, claims);
+
+            return Task.CompletedTask;
         }
 
         public Task AddLoginAsync(ApplicationUserDto user, UserLoginInfo login, CancellationToken cancellationToken)
         {
-            throw new NotImplementedException();
+            if (cancellationToken != null)
+            {
+                cancellationToken.ThrowIfCancellationRequested();
+            }
+
+            if (user == null)
+            {
+                throw new ArgumentNullException(nameof(user));
+            }
+
+            if (login == null)
+            {
+                throw new ArgumentNullException(nameof(login));
+            }
+
+            if(string.IsNullOrWhiteSpace(login.LoginProvider))
+            {
+                throw new ArgumentNullException(nameof(login.LoginProvider));
+            }
+
+            if(string.IsNullOrWhiteSpace(login.ProviderKey))
+            {
+                throw new ArgumentNullException(nameof(login.ProviderKey));
+            }
+
+            var loginDto = new UserLoginDto
+            {
+                LoginProvider = login.LoginProvider,
+                ProviderDisplayName = login.ProviderDisplayName,
+                ProviderKey = login.ProviderKey,
+                UserId = user.Id
+            };
+
+            _userService.AddLogin(loginDto);
+
+            return Task.CompletedTask;
+
         }
 
         public Task AddToRoleAsync(ApplicationUserDto user, string roleName, CancellationToken cancellationToken)
         {
-            throw new NotImplementedException();
+            if (cancellationToken != null)
+                cancellationToken.ThrowIfCancellationRequested();
+
+            if (user == null)
+                throw new ArgumentNullException(nameof(user));
+
+            if (string.IsNullOrWhiteSpace(roleName))
+                throw new ArgumentNullException(nameof(roleName));
+
+            _userService.AddUserRole(user, roleName);
+
+            return Task.CompletedTask;
         }
 
         public Task<IdentityResult> CreateAsync(ApplicationUserDto user, CancellationToken cancellationToken)
         {
-            throw new NotImplementedException();
+            try
+            {
+                if (cancellationToken != null)
+                    cancellationToken.ThrowIfCancellationRequested();
+
+                if (user == null)
+                    throw new ArgumentNullException(nameof(user));
+
+                _userService.AddUser(user);
+
+                return Task.FromResult(IdentityResult.Success);
+            }
+            catch (Exception ex)
+            {
+                return Task.FromResult(IdentityResult.Failed(new IdentityError { Code = ex.Message, Description = ex.Message }));
+            }
         }
 
         public Task<IdentityResult> DeleteAsync(ApplicationUserDto user, CancellationToken cancellationToken)
         {
-            throw new NotImplementedException();
+            try
+            {
+                if (cancellationToken != null)
+                    cancellationToken.ThrowIfCancellationRequested();
+
+                if (user == null)
+                    throw new ArgumentNullException(nameof(user));
+
+                _userService.DeleteUser(user);
+
+                return Task.FromResult(IdentityResult.Success);
+            }
+            catch (Exception ex)
+            {
+                return Task.FromResult(IdentityResult.Failed(new IdentityError { Code = ex.Message, Description = ex.Message }));
+            }
         }
 
         public void Dispose()
         {
-            throw new NotImplementedException();
+            // Lifetimes of dependencies are managed by the IoC container, so disposal here is unnecessary.
         }
 
         public Task<ApplicationUserDto> FindByEmailAsync(string normalizedEmail, CancellationToken cancellationToken)
         {
-            throw new NotImplementedException();
+            if (cancellationToken != null)
+            {
+                cancellationToken.ThrowIfCancellationRequested();
+            }
+
+            if(string.IsNullOrWhiteSpace(normalizedEmail))
+            {
+                throw new ArgumentNullException(nameof(normalizedEmail));
+            }
+
+            return Task.FromResult(_userService.GetUserByNormalizedEmail(normalizedEmail));
         }
 
         public Task<ApplicationUserDto> FindByIdAsync(string userId, CancellationToken cancellationToken)
         {
-            throw new NotImplementedException();
+            if (cancellationToken != null)
+            {
+                cancellationToken.ThrowIfCancellationRequested();
+            }
+
+            if (string.IsNullOrWhiteSpace(userId))
+            {
+                throw new ArgumentNullException(nameof(userId));
+            }
+
+            return Task.FromResult(_userService.GetUserById(userId));
         }
 
         public Task<ApplicationUserDto> FindByLoginAsync(string loginProvider, string providerKey, CancellationToken cancellationToken)
         {
-            throw new NotImplementedException();
+            if (cancellationToken != null)
+                cancellationToken.ThrowIfCancellationRequested();
+
+            if (string.IsNullOrWhiteSpace(loginProvider))
+                throw new ArgumentNullException(nameof(loginProvider));
+
+            if (string.IsNullOrWhiteSpace(providerKey))
+                throw new ArgumentNullException(nameof(providerKey));
+
+            return Task.FromResult(_userService.GetUserByLogin(loginProvider, providerKey));
         }
 
         public Task<ApplicationUserDto> FindByNameAsync(string normalizedUserName, CancellationToken cancellationToken)
         {
-            throw new NotImplementedException();
+            if (cancellationToken != null)
+                cancellationToken.ThrowIfCancellationRequested();
+
+            var user = _userService.GetUserByNormalizedUserName(normalizedUserName);
+
+            return Task.FromResult(user);
         }
 
         public Task<int> GetAccessFailedCountAsync(ApplicationUserDto user, CancellationToken cancellationToken)
