@@ -220,77 +220,182 @@ namespace RankBoard.Ids.Identity
 
         public Task<int> GetAccessFailedCountAsync(ApplicationUserDto user, CancellationToken cancellationToken)
         {
-            throw new NotImplementedException();
+            if (cancellationToken != null)
+                cancellationToken.ThrowIfCancellationRequested();
+
+            if (user == null)
+                throw new ArgumentNullException(nameof(user));
+
+            return Task.FromResult(user.AccessFailedCount);
         }
 
         public Task<IList<Claim>> GetClaimsAsync(ApplicationUserDto user, CancellationToken cancellationToken)
         {
-            throw new NotImplementedException();
+            if (cancellationToken != null)
+                cancellationToken.ThrowIfCancellationRequested();
+
+            if (user == null)
+                throw new ArgumentNullException(nameof(user));
+
+            IList<Claim> result = _userService.GetUserClaims(user);
+
+            return Task.FromResult(result);
         }
 
         public Task<string> GetEmailAsync(ApplicationUserDto user, CancellationToken cancellationToken)
         {
-            throw new NotImplementedException();
+            if (cancellationToken != null)
+                cancellationToken.ThrowIfCancellationRequested();
+
+            if (user == null)
+                throw new ArgumentNullException(nameof(user));
+
+            return Task.FromResult(user.Email);
         }
 
         public Task<bool> GetEmailConfirmedAsync(ApplicationUserDto user, CancellationToken cancellationToken)
         {
-            throw new NotImplementedException();
+            if (cancellationToken != null)
+                cancellationToken.ThrowIfCancellationRequested();
+
+            if (user == null)
+                throw new ArgumentNullException(nameof(user));
+
+            return Task.FromResult(user.EmailConfirmed);
         }
 
         public Task<bool> GetLockoutEnabledAsync(ApplicationUserDto user, CancellationToken cancellationToken)
         {
-            throw new NotImplementedException();
+            if (cancellationToken != null)
+                cancellationToken.ThrowIfCancellationRequested();
+
+            if (user == null)
+                throw new ArgumentNullException(nameof(user));
+
+            return Task.FromResult(user.LockoutEnabled);
         }
 
         public Task<DateTimeOffset?> GetLockoutEndDateAsync(ApplicationUserDto user, CancellationToken cancellationToken)
         {
-            throw new NotImplementedException();
+            if (cancellationToken != null)
+                cancellationToken.ThrowIfCancellationRequested();
+
+            if (user == null)
+                throw new ArgumentNullException(nameof(user));
+
+            return Task.FromResult(user.LockoutEnd);
         }
 
         public Task<IList<UserLoginInfo>> GetLoginsAsync(ApplicationUserDto user, CancellationToken cancellationToken)
         {
-            throw new NotImplementedException();
+            if (cancellationToken != null)
+                cancellationToken.ThrowIfCancellationRequested();
+
+            if (user == null)
+                throw new ArgumentNullException(nameof(user));
+
+            IList<UserLoginInfo> result = _userService.GetUserLogins(user)
+                .Select(x => new UserLoginInfo(x.LoginProvider, x.ProviderKey, x.ProviderDisplayName)).ToList();
+
+            return Task.FromResult(result);
         }
 
         public Task<string> GetNormalizedEmailAsync(ApplicationUserDto user, CancellationToken cancellationToken)
         {
-            throw new NotImplementedException();
+            if (cancellationToken != null)
+                cancellationToken.ThrowIfCancellationRequested();
+
+            if (user == null)
+                throw new ArgumentNullException(nameof(user));
+
+            return Task.FromResult(user.NormalizedEmail);
         }
 
         public Task<string> GetNormalizedUserNameAsync(ApplicationUserDto user, CancellationToken cancellationToken)
         {
-            throw new NotImplementedException();
+            if (cancellationToken != null)
+                cancellationToken.ThrowIfCancellationRequested();
+
+            if (user == null)
+                throw new ArgumentNullException(nameof(user));
+
+            return Task.FromResult(user.NormalizedUserName);
         }
 
         public Task<string> GetPasswordHashAsync(ApplicationUserDto user, CancellationToken cancellationToken)
         {
-            throw new NotImplementedException();
+            if (cancellationToken != null)
+                cancellationToken.ThrowIfCancellationRequested();
+
+            if (user == null)
+                throw new ArgumentNullException(nameof(user));
+
+            return Task.FromResult(user.PasswordHash);
         }
 
         public Task<string> GetPhoneNumberAsync(ApplicationUserDto user, CancellationToken cancellationToken)
         {
-            throw new NotImplementedException();
+            if (cancellationToken != null)
+                cancellationToken.ThrowIfCancellationRequested();
+
+            if (user == null)
+                throw new ArgumentNullException(nameof(user));
+
+            return Task.FromResult(user.PhoneNumber);
         }
 
         public Task<bool> GetPhoneNumberConfirmedAsync(ApplicationUserDto user, CancellationToken cancellationToken)
         {
-            throw new NotImplementedException();
+            if (cancellationToken != null)
+                cancellationToken.ThrowIfCancellationRequested();
+
+            if (user == null)
+                throw new ArgumentNullException(nameof(user));
+
+            return Task.FromResult(user.PhoneNumberConfirmed);
         }
 
         public Task<IList<string>> GetRolesAsync(ApplicationUserDto user, CancellationToken cancellationToken)
         {
-            throw new NotImplementedException();
+            if (cancellationToken != null)
+                cancellationToken.ThrowIfCancellationRequested();
+
+            if (user == null)
+                throw new ArgumentNullException(nameof(user));
+
+            IList<string> result = _userService.GetUserRoles(user);
+
+            return Task.FromResult(result);
         }
 
         public Task<string> GetSecurityStampAsync(ApplicationUserDto user, CancellationToken cancellationToken)
         {
-            throw new NotImplementedException();
+            if (cancellationToken != null)
+                cancellationToken.ThrowIfCancellationRequested();
+
+            if (user == null)
+                throw new ArgumentNullException(nameof(user));
+
+            return Task.FromResult(user.SecurityStamp);
         }
 
         public Task<string> GetTokenAsync(ApplicationUserDto user, string loginProvider, string name, CancellationToken cancellationToken)
         {
-            throw new NotImplementedException();
+            if (cancellationToken != null)
+                cancellationToken.ThrowIfCancellationRequested();
+
+            if (user == null)
+                throw new ArgumentNullException(nameof(user));
+
+            if (string.IsNullOrWhiteSpace(loginProvider))
+                throw new ArgumentNullException(nameof(loginProvider));
+
+            if (string.IsNullOrWhiteSpace(name))
+                throw new ArgumentNullException(nameof(name));
+
+            var userToken = _userService.GetUserToken(user, loginProvider, name);
+
+            return Task.FromResult(userToken?.Name);
         }
 
         public Task<bool> GetTwoFactorEnabledAsync(ApplicationUserDto user, CancellationToken cancellationToken)

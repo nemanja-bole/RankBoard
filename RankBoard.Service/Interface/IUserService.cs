@@ -42,5 +42,13 @@ namespace RankBoard.Service.Interface
         ApplicationUserDto GetUserByLogin(string loginProvider, string providerKey);
 
         ApplicationUserDto GetUserByNormalizedUserName(string normalizedUserName);
+
+        IList<Claim> GetUserClaims(ApplicationUserDto user);
+
+        IList<UserLoginDto> GetUserLogins(ApplicationUserDto user);
+
+        IList<string> GetUserRoles(ApplicationUserDto user);
+
+        UserTokenDto GetUserToken(ApplicationUserDto user, string loginProvider, string name);
     }
 }

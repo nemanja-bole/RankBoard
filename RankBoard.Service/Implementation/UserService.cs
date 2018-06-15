@@ -176,6 +176,30 @@ namespace RankBoard.Service.Implementation
             return _mapper.Map<User, ApplicationUserDto>(userInDb);
         }
 
+        public IList<Claim> GetUserClaims(ApplicationUserDto user)
+        {
+            return _unitOfWork.UserClaimRepository.GetByUserId(user.Id)
+                .Select(x => new Claim(x.ClaimType, x.ClaimValue))
+                .ToList();
+        }
+
+        public IList<UserLoginDto> GetUserLogins(ApplicationUserDto user)
+        {
+            return _unitOfWork.UserLoginRepository.FindByUserId(user.Id).Select(_mapper.Map<UserLogin, UserLoginDto>).ToList();
+        }
+
+        public IList<string> GetUserRoles(ApplicationUserDto user)
+        {
+            return _unitOfWork.UserRoleRepository.GetRolesByUserId(user.Id).Select(x => x.Name).ToList();
+        }
+
+        public UserTokenDto GetUserToken(ApplicationUserDto user, string loginProvider, string name)
+        {
+            var userToken = _unitOfWork.UserTokenRepository.FindById(new UserTokenKey { UserId = user.Id, LoginProvider = loginProvider, Name = name });
+
+            return _mapper.Map<UserToken, UserTokenDto>(userToken);
+        }
+
         #endregion
     }
 }
