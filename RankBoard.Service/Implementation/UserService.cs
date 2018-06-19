@@ -200,6 +200,103 @@ namespace RankBoard.Service.Implementation
             return _mapper.Map<UserToken, UserTokenDto>(userToken);
         }
 
+        public IList<ApplicationUserDto> GetUsersForClaim(Claim claim)
+        {
+            var users = _unitOfWork.UserClaimRepository.GetUsersForClaim(claim.Type, claim.Value).Select(_mapper.Map<User, ApplicationUserDto>);
+
+            return users.ToList();
+        }
+
+        public IList<ApplicationUserDto> GetUsersByRoleName(string roleName)
+        {
+            var users = _unitOfWork.UserRoleRepository.GetUsersByRoleName(roleName).Select(_mapper.Map<User, ApplicationUserDto>);
+
+            return users.ToList();
+        }
+
+        public IList<RoleDto> GetRoleNamesByUser(ApplicationUserDto user)
+        {
+            var roles = _unitOfWork.UserRoleRepository.GetRolesByUserId(user.Id).Select(_mapper.Map<Role, RoleDto>);
+
+            return roles.ToList();
+        }
+
+        public void RemoveUserClaims(ApplicationUserDto user, IEnumerable<Claim> claims)
+        {
+            var claimsInDb = _unitOfWork.UserClaimRepository.GetByUserId(user.Id);
+
+            if(claimsInDb.Any())
+            {
+                foreach(var claim in claims)
+                {
+                    var claimInDb = claimsInDb.SingleOrDefault(x => x.ClaimValue == claim.Value && x.ClaimType == claim.Type);
+
+                    if(claimInDb != null)
+                    {
+                        _unitOfWork.UserClaimRepository.Remove(claimInDb.Id);
+                    }
+                }
+
+                _unitOfWork.SaveChanges();
+            }
+        }
+
+        public void RemoveFromRole(ApplicationUserDto user, string roleName)
+        {
+            _unitOfWork.UserRoleRepository.Remove(user.Id, roleName);
+
+            _unitOfWork.SaveChanges();
+        }
+
+        public void RemoveLogin(ApplicationUserDto user, string loginProvider, string providerKey)
+        {
+            _unitOfWork.UserLoginRepository.Remove(new UserLoginKey { LoginProvider = loginProvider, ProviderKey = providerKey });
+
+            _unitOfWork.SaveChanges();
+        }
+
+        public void RemoveToken(ApplicationUserDto user, string loginProvider, string name)
+        {
+            _unitOfWork.UserTokenRepository.Remove(new UserTokenKey { UserId = user.Id, LoginProvider = loginProvider, Name = name });
+
+            _unitOfWork.SaveChanges();
+        }
+
+        public void ReplaceUserClaim(ApplicationUserDto user, Claim claim, Claim newClaim)
+        {
+            var claimInDb = _unitOfWork.UserClaimRepository.GetByUserId(user.Id)
+                .SingleOrDefault(x => x.ClaimValue == claim.Value && x.ClaimType == claim.Type);
+
+            if(claimInDb != null)
+            {
+                claimInDb.ClaimType = newClaim.Type;
+                claimInDb.ClaimValue = newClaim.Value;
+
+                _unitOfWork.UserClaimRepository.Update(claimInDb);
+                _unitOfWork.SaveChanges();
+            }
+        }
+
+        public void AddToken(ApplicationUserDto user, string loginProvider, string name, string value)
+        {
+            var userTokenEntity = new UserToken
+            {
+                LoginProvider = loginProvider,
+                Name = name,
+                Value = value,
+                UserId = user.Id                
+            };
+
+            _unitOfWork.UserTokenRepository.Add(userTokenEntity);
+            _unitOfWork.SaveChanges();
+        }
+
+        public void UpdateUser(ApplicationUserDto user)
+        {
+            _unitOfWork.UserRepository.Update(_mapper.Map<ApplicationUserDto, User>(user));
+            _unitOfWork.SaveChanges();
+        }
+
         #endregion
     }
 }

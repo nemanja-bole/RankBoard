@@ -50,5 +50,25 @@ namespace RankBoard.Service.Interface
         IList<string> GetUserRoles(ApplicationUserDto user);
 
         UserTokenDto GetUserToken(ApplicationUserDto user, string loginProvider, string name);
+
+        IList<ApplicationUserDto> GetUsersForClaim(Claim claim);
+
+        IList<ApplicationUserDto> GetUsersByRoleName(string roleName);
+
+        IList<RoleDto> GetRoleNamesByUser(ApplicationUserDto user);
+
+        void RemoveUserClaims(ApplicationUserDto user, IEnumerable<Claim> claims);
+
+        void RemoveFromRole(ApplicationUserDto user, string roleName);
+
+        void RemoveLogin(ApplicationUserDto user, string loginProvider, string providerKey);
+
+        void RemoveToken(ApplicationUserDto user, string loginProvider, string name);
+
+        void ReplaceUserClaim(ApplicationUserDto user, Claim claim, Claim newClaim);
+
+        void UpdateUser(ApplicationUserDto user);
+
+        void AddToken(ApplicationUserDto user, string loginProvider, string name, string value);
     }
 }
