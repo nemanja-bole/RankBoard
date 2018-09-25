@@ -37,7 +37,16 @@ namespace RankBoard.Service
                         new DbContextOptionsBuilder<ApplicationDbContext>()
                         .UseSqlServer(configuration.GetConnectionString("RankBoardUsersDb"))
                         .Options)));
-            
+
+            /****
+             
+             NOTE: Using AddScoped for the IUnitOfWork allows a single instance 
+             of the underlying IDbCconnection to be used per request, as opposed 
+             to AddTransient which would create a new instance each time it is resolved. 
+             This is what allows the UnitOfWork pattern to work with multiple repositories
+             
+             ****/
+
             return services;
         }
     }

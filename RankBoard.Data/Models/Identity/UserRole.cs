@@ -1,10 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Text;
 
 namespace RankBoard.Data.Models.Identity
 {
+    [Table("UserRoles")]
     public class UserRole
     {
         [StringLength(450)]

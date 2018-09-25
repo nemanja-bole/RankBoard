@@ -10,6 +10,8 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using RankBoard.Dto.Identity;
+using RankBoard.Ids.Identity;
 using RankBoard.Service;
 using RankBoard.Service.Implementation;
 using RankBoard.Service.Interface;
@@ -29,7 +31,9 @@ namespace RankBoard.Ids
         // For more information on how to configure your application, visit https://go.microsoft.com/fwlink/?LinkID=398940
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddIdentity<IdentityUser, IdentityRole>();
+            services.AddIdentity<ApplicationUserDto, IdentityRole>()
+                .AddCustomStores()
+                .AddDefaultTokenProviders();
 
             services.AddApplicationDbContext(Configuration);
 
