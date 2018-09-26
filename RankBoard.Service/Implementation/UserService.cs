@@ -14,14 +14,13 @@ namespace RankBoard.Service.Implementation
         private readonly IUnitOfWorkIdentity _unitOfWork;
         private IMapper _mapper;
 
-
-        #region RolesMethods
-
         public UserService(IUnitOfWorkIdentity unitOfWork, IMapper mapper)
         {
             _unitOfWork = unitOfWork;
             _mapper = mapper;
         }
+
+        #region RolesMethods
 
         public void AddRole(RoleDto roleDto)
         {

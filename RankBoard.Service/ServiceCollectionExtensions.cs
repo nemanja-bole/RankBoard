@@ -31,6 +31,8 @@ namespace RankBoard.Service
         {            
             services.AddDbContext<ApplicationDbContext>(options => options.UseSqlServer(configuration.GetConnectionString("RankBoardUsersDb")));
 
+            services.AddAutoMapper();
+
             services.AddScoped<IUnitOfWorkIdentity, UnitOfWorkIdentity>(provider => 
                 new UnitOfWorkIdentity(
                     new ApplicationDbContext(
